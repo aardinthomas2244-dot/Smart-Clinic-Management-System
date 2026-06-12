@@ -1,0 +1,30 @@
+name: Java Backend CI Pipeline
+
+# Criteria 2: Automatically trigger on push or pull request events
+on:
+  push:
+    branches: [ "main", "master", "develop" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    name: Compile and Test Backend
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the source code from the repository
+    - name: Checkout Repository Code
+      uses: actions/checkout@v4
+
+    # Step 2: Criteria 1 - Set up the specific Java JDK runtime environment
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'maven' # Caches dependencies to make subsequent runs faster
+
+    # Step 3: Criteria 1 - Compile the application cleanly using Maven
+    - name: Compile and Package with Maven
+      run: mvn clean package -B
